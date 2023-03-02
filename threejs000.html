@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>threejs000</title>
+    <script type="text/javascript" src="/libs/three.js"></script>
+    <style>
+        body {
+            /* set margin to 0 and overflow to hidden, to
+             use the complete page */
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Div which will hold the Output -->
+<div id="WebGL-output">
+</div>
+
+<!-- Javascript code that runs our Three.js examples -->
+<script type="text/javascript">
+
+    // once everything is loaded, we run our Three.js stuff.
+    function init() {
+        // create a scene, that will hold all our elements such as objects, cameras and lights.
+        var scene = new THREE.Scene();
+
+        // create a camera, which defines where we're looking at.
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        // create a render and set the size
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setClearColorHex();
+        renderer.setClearColor(new THREE.Color(0xEEEEEE));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        // show axes in the screen, X: red, Y: green, Z: blue
+        var axes = new THREE.AxisHelper(20);
+        scene.add(axes);
+
+        // create a cube
+        var cubeGeometry = new THREE.BoxGeometry(2, 2, 2);
+        var cubeMaterial = new THREE.MeshNormalMaterial({wireframe: false});
+        var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+        
+        // make another cube
+        var cube2 = cube.clone();
+        var axes2 = new THREE.AxisHelper(5);
+        cube2.add(axes2);
+
+        // add the cubes to the scene
+        scene.add(cube);
+        scene.add(cube2);
+
+        // TODO: modify the tranformation matrix to rotate cube2 45 degree in y-axis.
+        const m = new THREE.Matrix4();
+        m.set(  0, 0, 1, 7,
+                0, 1, 0, 0,
+                -1, 0, 0, 0, 
+                0, 0, 0, 1 );
+        
+        cube2.applyMatrix(m);
+        console.log(cube2.matrix);
+ 
+        // position and point the camera to the center of the scene
+        camera.position.x = 10;
+        camera.position.y = 15;
+        camera.position.z = 20;
+        camera.lookAt(scene.position);
+
+        // add the output of the renderer to the html element
+        document.getElementById("WebGL-output").appendChild(renderer.domElement);
+
+        // render the scene
+        renderer.render(scene, camera);
+    }
+    window.onload = init
+
+</script>
+</body>
+</html>
